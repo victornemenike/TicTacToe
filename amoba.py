@@ -78,8 +78,8 @@ class AbstractRepresentation(BoardRepresentation):
             self.board_matrix[i, ii] = 1
 
     # this is the function which checks if there is any winning sequence in the board. it checks for every square,
-    # not just for the square where the last move were made, if we want to get a minor speed advantage, we can rewrite
-    # it to only check for the last move, but for tic-tac-toe, it does not matter.
+    # not just for the square where the last move were made, for minor speed advantage it can be rewritten
+    # to only check for the last move, but for tic-tac-toe, it does not matter.
     # in this form it acts like a general search algorithm for words in a character matrix where the words can be
     # on diagonals also
     # it iterates over the winning sequences, in this case its 2 iteration one for "-1,-1,-1", one for "1,1,1"
@@ -95,13 +95,11 @@ class AbstractRepresentation(BoardRepresentation):
                 if element == word_[0]:  # if the element of the board is "x"
                     for j in self.neighbours:  # for every direction defined by neigbours
                         game_over = True  # we assume the game is over
-                        for jj in range(self.numofwin):  # we check in every direction if there are 5 x-s
+                        for jj in range(self.numofwin):  # we check in every direction if there are 3 x-s
                             try:
                                 # if we find a value not "x" in a given direction, the game is not over,
-                                #  we substract if there is negative indexing, because in this context, negative
-                                #  indecies have no meaningful interpretation. only negative index, what is
-                                # possible here is -1, because the neighbours can have -1 value
-                                # if there is a winning sequence, we will never substract anything from cucc
+                                #  negative indexing is bad here, hence the if statment
+                            
                                 if word_[jj] != self.board_matrix[i + jj * j[0], ii + jj * j[1]] \
                                         or i + jj * j[0] < 0 or ii + jj * j[1] < 0:
                                     game_over = False
@@ -146,8 +144,8 @@ class AbstractRepresentation(BoardRepresentation):
 
 
 # some hyperparameters
-GAMMA = 0.5
-ALPHA = 0.0005
+GAMMA = 0.5 #for exp. moving average
+ALPHA = 0.0005 #learning rate
 
 
 class Node:
@@ -467,10 +465,10 @@ ai2 = AI(0, -1, (density, density), 2, resolution, density,
          3)  # the ai object will contain its own representation, what he sees from the actual representation
 
 
-# AImain()
-# #
-# torch.save(ai1.dqn, "ai100")  # saving a network configuration after training
-# torch.save(ai2.dqn, "ai200")  # saving a network configuration after training
+AImain()
+#
+torch.save(ai1.dqn, "ainew")  # saving a network configuration after training
+torch.save(ai2.dqn, "ainew")  # saving a network configuration after training
 
 #  the main fucntion, we can play with the ai, and it also the function, where we draw the board,
 #  and implement the game loop and drawing functions using the pygame library
@@ -484,7 +482,7 @@ def main():
         aiturn = True
         ai1.end = False
         ai1.epsilon = 1
-        ai1.dqn = torch.load('ai100')
+        ai1.dqn = torch.load('ai100') #loading an existing nn structure
         ai1.dqn.eval()
         ai = ai1
     elif ai_start == "Yes":
