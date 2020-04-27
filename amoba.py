@@ -11,7 +11,6 @@ import torch.nn.functional as F
 
 # we are representing the board with it resolution, how much square we divide it into (square/column), and from that
 # defining a board_rep which will contain the coordinates of the left upper edge of the squares
-# some variables are class variables, some are object variables, not much logic here, just for practice
 
 class BoardRepresentation:
     """Representing the board as a physical object, which we can draw on."""
@@ -153,7 +152,7 @@ ALPHA = 0.0005
 
 class Node:
     """Board states are stored in a hierarchical tree structure, allowing for tree search algorithms for more
-     complex problems later. For example gomoku."""
+     complex problems later."""
 
     def __init__(self, state, parent):
         self.parent = parent  # parent is the state, this state is originated from
